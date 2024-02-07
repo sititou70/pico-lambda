@@ -1,0 +1,4 @@
+let id1 = λx. x in
+let id2 = λx. x in
+
+(id1 id2)

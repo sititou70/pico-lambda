@@ -1,0 +1,21 @@
+let ToNumber = λn. (n (λx. (succ x)) 0) in
+
+let One   = λs. λz. (s z) in
+let Two   = λs. λz. (s (s z)) in
+let Three = λs. λz. (s (s (s z))) in
+let Four  = λs. λz. (s (s (s (s z)))) in
+
+// see: https://en.wikipedia.org/wiki/Church_encoding
+let Succ = λn. λf. λx. (f (n f x)) in
+let Plus = λm. λn. (m Succ n) in
+let Mult = λm. λn. λf. (m (n f)) in
+let Exp  = λm. λn. (n m) in
+let Pred = λn. λf. λx. (n (λg. λh. (h (g f))) (λu. x) (λu. u)) in
+
+(ToNumber
+  // ((1 + 2) * 3)^(4 - 1) = 729
+  (Exp
+    (Mult (Plus One Two) Three)
+    (Pred Four)
+  )
+)

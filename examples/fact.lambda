@@ -1,0 +1,65 @@
+let ToNumber = λn. (n (λx. (succ x)) 0) in
+
+let Zero = λs. λz. z in
+let One = λs. λz. (s z) in
+let Five = λs. λz. (s (s (s (s (s z))))) in
+
+let Succ = λn. λs. λz. (s (n s z)) in
+
+let Mul = λn1. λn2. λs. λz. (n2 (λz. (n1 s z)) z) in
+
+let MakePair = λfirstValue. λsecondValue. λselector. (selector firstValue secondValue) in
+let First = λpair. (pair (λfirstValue. λsecondValue. firstValue)) in
+let Second = λpair. (pair (λfirstValue. λsecondValue. secondValue)) in
+let Pred = λn. (
+  (Second
+    (n
+      // s
+      λpair. (
+        (MakePair
+          (Succ (First pair))
+          (First pair)
+        )
+      )
+      // z
+      (MakePair Zero Zero)
+    )
+  )
+) in
+
+let Force = λthunk. (thunk 0) in
+
+let If = λbool. λdelayedTrueValue. λdelayedFalseValue. (bool delayedTrueValue delayedFalseValue) in
+let True = λdelayedTrueValue. λdelayedFalseValue. (Force delayedTrueValue) in
+let False = λdelayedTrueValue. λdelayedFalseValue. (Force delayedFalseValue) in
+
+let IsZero = λn. (n (λz. False) True) in
+
+let Fix = (
+  λg. (
+    λh. (
+      g (λarg. (h h arg))
+    )
+    λh. (
+      g (λarg. (h h arg))
+    )
+  )
+) in
+
+// main
+let Fact = (
+  Fix
+  λfact. λn. (
+    (If
+      (IsZero n)
+      λx. One
+      λx. (
+        Mul
+        n
+        (fact (Pred n))
+      )
+    )
+  )
+) in
+
+(ToNumber (Fact Five))
