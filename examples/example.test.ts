@@ -6,6 +6,7 @@ import { print } from "../printer/printer";
 test.each([
   ["arithmetics.lambda", "729"],
   ["fact.lambda", "120"],
+  ["poly-fixed.lambda", "λx. (x)"],
 ])("example: %s", (file, result) => {
   const input = fs.readFileSync(`examples/${file}`).toString();
 
