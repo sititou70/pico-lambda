@@ -93,8 +93,9 @@ export const inferTypeAndConatraints = (
       const result1 = inferTypeAndConatraints(context, term.value);
       if (!result1.success) return result1;
 
+      const type = getFreshTypeVariable();
       const new_context = new Map(context);
-      new_context.set(getVariableId(term.variable), result1.value.type);
+      new_context.set(getVariableId(term.variable), type);
       const result2 = inferTypeAndConatraints(new_context, term.body);
       if (!result2.success) return result2;
 
@@ -103,6 +104,10 @@ export const inferTypeAndConatraints = (
         constraints: [
           ...result1.value.constraints,
           ...result2.value.constraints,
+          {
+            lhs: result1.value.type,
+            rhs: type,
+          },
         ],
       });
     }
