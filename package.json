@@ -6,7 +6,8 @@
   "scripts": {
     "start": "ts-node main.ts",
     "test": "jest",
-    "test-watch": "jest --watch"
+    "test-watch": "jest --watch",
+    "typecheck": "tsc --noEmit"
   },
   "keywords": [],
   "author": "",
