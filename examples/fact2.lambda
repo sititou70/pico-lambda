@@ -1,0 +1,34 @@
+let ToNumber = λn. (n (λx. (succ x)) 0) in
+
+let One = λs. λz. (s z) in
+let Five = λs. λz. (s (s (s (s (s z))))) in
+
+let Succ = λn. λs. λz. (s (n s z)) in
+
+let Mul = λn1. λn2. λs. λz. (n2 (λz. (n1 s z)) z) in
+
+let MakePair = λfirstValue. λsecondValue. λselector. (selector firstValue secondValue) in
+let First = λpair. (pair (λfirstValue. λsecondValue. firstValue)) in
+let Second = λpair. (pair (λfirstValue. λsecondValue. secondValue)) in
+
+let True = λtrueValue. λfalseValue. trueValue in
+let False = λtrueValue. λfalseValue. falseValue in
+
+// main
+let Fact = (
+  λn. (
+    Second (
+      n
+      (
+        λpair. (
+          MakePair
+          (Succ (First pair)) 
+          (Mul (First pair) (Second pair))
+        )
+      )
+      (MakePair One One)
+    )
+  )
+) in
+
+(ToNumber (Fact Five))
