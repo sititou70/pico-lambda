@@ -11,9 +11,6 @@ let MakePair = λfirstValue. λsecondValue. λselector. (selector firstValue sec
 let First = λpair. (pair (λfirstValue. λsecondValue. firstValue)) in
 let Second = λpair. (pair (λfirstValue. λsecondValue. secondValue)) in
 
-let True = λtrueValue. λfalseValue. trueValue in
-let False = λtrueValue. λfalseValue. falseValue in
-
 // main
 let Fact = (
   λn. (

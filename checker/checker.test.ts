@@ -1,5 +1,5 @@
 import { parse } from "../parser/parser";
-import { inferType, inferTypeAndConatraints } from "./checker";
+import { inferType, inferTypeAndConstraints } from "./checker";
 import { Type, isSameType } from "./types";
 
 test.each([
@@ -40,12 +40,12 @@ test.each([
       },
     },
   ],
-])("inferTypeAndConatraints: %s", (input, expected_result) => {
+])("inferTypeAndConstraints: %s", (input, expected_result) => {
   const parse_result = parse(input);
   expect(parse_result.success).toBe(true);
   if (!parse_result.success) return;
 
-  const result = inferTypeAndConatraints(new Map(), parse_result.value);
+  const result = inferTypeAndConstraints(new Map(), parse_result.value);
   expect(result).toMatchObject(expected_result);
 });
 

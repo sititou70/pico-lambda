@@ -10,7 +10,7 @@ import {
   TypeAssigning,
 } from "./types";
 
-export const inferTypeAndConatraints = (
+export const inferTypeAndConstraints = (
   context: Map<string, Type>,
   term: AST
 ): Result<{ type: Type; constraints: TypeConstraint[] }> => {
@@ -28,7 +28,7 @@ export const inferTypeAndConatraints = (
       const new_context = new Map(context);
       new_context.set(getVariableId(term.argument), argument_type);
 
-      const result = inferTypeAndConatraints(new_context, term.body);
+      const result = inferTypeAndConstraints(new_context, term.body);
       if (!result.success) return result;
 
       return ok({
@@ -43,10 +43,10 @@ export const inferTypeAndConatraints = (
     }
     case "Apply": {
       // CT-App
-      const result1 = inferTypeAndConatraints(context, term.operator);
+      const result1 = inferTypeAndConstraints(context, term.operator);
       if (!result1.success) return result1;
 
-      const result2 = inferTypeAndConatraints(context, term.operand);
+      const result2 = inferTypeAndConstraints(context, term.operand);
       if (!result2.success) return result2;
 
       const type = getFreshTypeVariable();
@@ -77,7 +77,7 @@ export const inferTypeAndConatraints = (
     }
     case "Succ": {
       // CT-Succ
-      const result = inferTypeAndConatraints(context, term.body);
+      const result = inferTypeAndConstraints(context, term.body);
       if (!result.success) return result;
 
       return ok({
@@ -90,13 +90,13 @@ export const inferTypeAndConatraints = (
     }
     case "Let": {
       // CT-Let
-      const result1 = inferTypeAndConatraints(context, term.value);
+      const result1 = inferTypeAndConstraints(context, term.value);
       if (!result1.success) return result1;
 
       const type = getFreshTypeVariable();
       const new_context = new Map(context);
       new_context.set(getVariableId(term.variable), type);
-      const result2 = inferTypeAndConatraints(new_context, term.body);
+      const result2 = inferTypeAndConstraints(new_context, term.body);
       if (!result2.success) return result2;
 
       return ok({
@@ -215,10 +215,10 @@ const composedTypeAssign = (
     .reduce((type, assigning) => typeAssign(assigning, type), type);
 
 export const inferType = (term: AST): Result<Type> => {
-  const infer_result = inferTypeAndConatraints(new Map(), term);
+  const infer_result = inferTypeAndConstraints(new Map(), term);
   if (!infer_result.success)
     return error({
-      msg: "inferType: inferTypeAndConatraints failed",
+      msg: "inferType: inferTypeAndConstraints failed",
       error: infer_result,
     });
 

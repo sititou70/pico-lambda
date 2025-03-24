@@ -126,10 +126,10 @@ const assign = (term: AST, variable: ASTVariable, value: AST): AST => {
 const evaluate1 = (term: AST): Result<AST> => {
   switch (term.type) {
     case "Variable": {
-      return error("cannnot eval free variable");
+      return error("cannot eval free variable");
     }
     case "Lambda": {
-      return error("cannnot eval lambda");
+      return error("cannot eval lambda");
     }
     case "Apply": {
       // E-App1
@@ -146,13 +146,13 @@ const evaluate1 = (term: AST): Result<AST> => {
       const operator = term.operator;
       if (!isASTType(operator, "Lambda"))
         return error(
-          "unexpected error: operator is not lambda, but cannnot be evaluated"
+          "unexpected error: operator is not lambda, but cannot be evaluated"
         );
 
       return ok(assign(operator.body, operator.argument, term.operand));
     }
     case "Zero": {
-      return error("cannnot eval zero");
+      return error("cannot eval zero");
     }
     case "Succ": {
       // E-Succ
@@ -160,7 +160,7 @@ const evaluate1 = (term: AST): Result<AST> => {
       if (evaluated_body_result.success)
         return ok({ ...term, body: evaluated_body_result.value });
 
-      return error("cannnot eval succ body");
+      return error("cannot eval succ body");
     }
     case "Let": {
       // E-Let
@@ -187,7 +187,7 @@ export const evaluate = (term: AST): Result<AST> => {
     const result = evaluate1(evaluating_term);
     if (!result.success)
       return error({
-        msg: "evaluating_term is not value, but cannnot eval",
+        msg: "evaluating_term is not value, but cannot eval",
         evaluating_term,
       });
 
