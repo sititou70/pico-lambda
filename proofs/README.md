@@ -1,5 +1,5 @@
 ```sh
 sudo apt install opam
-opam pin add coq 8.19.0
-opam install vscoq-language-server
+opam install vscoq-language-server.2.2.5
+code --install-extension "maximedenes.vscoq@2.2.5"
 ```
